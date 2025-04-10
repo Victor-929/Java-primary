@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/day02-collection-map-stream/day02-collection-map-stream.iml" filepath="$PROJECT_DIR$/day02-collection-map-stream/day02-collection-map-stream.iml" />
       <module fileurl="file://$PROJECT_DIR$/day03-file-IO/day03-file-IO.iml" filepath="$PROJECT_DIR$/day03-file-IO/day03-file-IO.iml" />
       <module fileurl="file://$PROJECT_DIR$/day04-thread/day04-thread.iml" filepath="$PROJECT_DIR$/day04-thread/day04-thread.iml" />
+      <module fileurl="file://$PROJECT_DIR$/day05-net/day05-net.iml" filepath="$PROJECT_DIR$/day05-net/day05-net.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaseprojectmax.iml" filepath="$PROJECT_DIR$/javaseprojectmax.iml" />
     </modules>
   </component>
