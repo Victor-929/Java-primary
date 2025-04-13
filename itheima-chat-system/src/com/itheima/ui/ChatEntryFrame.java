@@ -2,6 +2,7 @@ package com.itheima.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.Socket;
 
 public class ChatEntryFrame extends JFrame { // 修改: 继承JFrame类
     private JTextField nicknameField;
@@ -46,7 +47,7 @@ public class ChatEntryFrame extends JFrame { // 修改: 继承JFrame类
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setBackground(Color.decode("#f0f0f0"));
 
-        enterButton = new JButton("进入");
+        enterButton = new JButton("登录");
         enterButton.setFont(new Font("楷体", Font.BOLD, 16));
         enterButton.setBackground(Color.decode("#007BFF"));
         enterButton.setForeground(Color.WHITE);
@@ -66,9 +67,13 @@ public class ChatEntryFrame extends JFrame { // 修改: 继承JFrame类
 
         //添加监视器
         enterButton.addActionListener(e -> {
-            String nickname = nicknameField.getText().trim();
+            String nickname = nicknameField.getText();// 获取输入的昵称
+            nicknameField.setText("");// 清空输入框
             if (!nickname.isEmpty()) {
                 //进入聊天室逻辑
+                //立即发送登录消息给服务端程序
+                //1、请求一个登录socket管道，建立与服务端的链接
+                Socket socket = new Socket("127.0.0.1", Constant.PORT);
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "请输入昵称！");
