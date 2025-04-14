@@ -2,12 +2,15 @@ package com.itheima.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class ChatEntryFrame extends JFrame { // 修改: 继承JFrame类
     private JTextField nicknameField;
     private JButton enterButton;
     private JButton cancelButton;
+    private Socket socket;//记住当前客户端的通信管道
     
     public ChatEntryFrame() {
         setTitle("局域网聊天室");
@@ -70,11 +73,15 @@ public class ChatEntryFrame extends JFrame { // 修改: 继承JFrame类
             String nickname = nicknameField.getText();// 获取输入的昵称
             nicknameField.setText("");// 清空输入框
             if (!nickname.isEmpty()) {
-                //进入聊天室逻辑
-                //立即发送登录消息给服务端程序
                 //1、请求一个登录socket管道，建立与服务端的链接
-                Socket socket = new Socket("127.0.0.1", Constant.PORT);
-                dispose();
+                try {
+                    login(nickname);
+                    //进入聊天室逻辑,启动聊天界面，把昵称传过去
+                    new ClientChatFrame(nickname, socket);
+                    this.dispose();// 关闭登录窗口
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "请输入昵称！");
             }
@@ -85,6 +92,17 @@ public class ChatEntryFrame extends JFrame { // 修改: 继承JFrame类
         setVisible(true);
     }
 
+    public void login( String nickname) throws IOException {
+        //立即发送登录消息给服务端程序
+        //1、创建scoket管道请求与服务端的socket链接
+        socket = new Socket(Constant.SERVER_IP,Constant.SERVER_PORT);
+        //2、立即发送消息类型1和自己的昵称的服务端
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        dos.writeInt(1);//发送消息类型1
+        dos.writeUTF(nickname);//发送自己的昵称
+        dos.flush();
+
+    }
     public static void main(String[] args) {
         new ChatEntryFrame();
     }

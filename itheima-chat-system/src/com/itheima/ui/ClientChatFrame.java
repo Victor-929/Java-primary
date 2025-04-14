@@ -4,16 +4,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.Socket;
+import java.util.List;
 
 public class ClientChatFrame extends JFrame{
     public JTextArea smsContent = new JTextArea(23,50);
     private JTextArea smsSend = new JTextArea(4,40);
-    public JList<String> onlineUser = new JList<>();
+    public JList<String> onlineUsers = new JList<>();
     public JButton sendBn = new JButton("发送");
+    private Socket socket;
 
     public ClientChatFrame(){
         initView();
         this.setVisible(true);
+    }
+    public ClientChatFrame(String nickname, Socket socket){
+        this();//先调用上面的无参构造器，初始化界面信息
+        //初始化昵称到窗口
+        this.setTitle(nickname + "的聊天窗口");
+        this.socket = socket;
+
+        //立即把客户端的socket管道交给一个独立的线程专门负责读取客户端socket从服务端收到的在线人数更新数据或者群聊数据。
+        new ClientReaderThread(socket, this).start();
+
     }
 
     private void initView(){
@@ -39,9 +52,9 @@ public class ClientChatFrame extends JFrame{
         smsSend.setLineWrap(true);
 
         //在线用户列表
-        onlineUser.setFont(font);
-        onlineUser.setFixedCellWidth(120);
-        onlineUser.setVisibleRowCount(13);
+        onlineUsers.setFont(font);
+        onlineUsers.setFixedCellWidth(120);
+        onlineUsers.setVisibleRowCount(13);
 
         //创建底部面板
         JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -67,7 +80,7 @@ public class ClientChatFrame extends JFrame{
         bottomPanel.add(btns,BorderLayout.EAST);
 
         //用户列表面板
-        JScrollPane userListScrollPane = new JScrollPane(onlineUser);
+        JScrollPane userListScrollPane = new JScrollPane(onlineUsers);
         userListScrollPane.setBorder(BorderFactory.createEmptyBorder());
         userListScrollPane.setPreferredSize(new Dimension(120, 500));
 
@@ -84,5 +97,10 @@ public class ClientChatFrame extends JFrame{
 
     public static void main(String[] args) {
         new ClientChatFrame();
+    }
+
+    public void updateOnlineUsers(String[] onLineNames) {
+        //把线程读取到的在线用户昵称展示到界面上
+        onlineUsers.setListData(onLineNames);
     }
 }
