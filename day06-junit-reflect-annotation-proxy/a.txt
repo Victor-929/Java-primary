@@ -1,0 +1,16 @@
+============Dog============
+name:旺财
+age:3
+hobby:null
+============Student============
+name:小明
+age:18
+hobby:篮球
+============Teacher============
+name:小红
+age:30
+hobby:java
+salary:5000.0
+className:422期
+sex:广东
+phone:1234567898
