@@ -2,10 +2,8 @@ package com.itheima.ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.DataOutputStream;
 import java.net.Socket;
-import java.util.List;
 
 public class ClientChatFrame extends JFrame{
     public JTextArea smsContent = new JTextArea(23,50);
@@ -75,6 +73,16 @@ public class ClientChatFrame extends JFrame{
         btns.setBackground(new Color(0xf0, 0xf0, 0xf0));
         btns.add(sendBn);
 
+        //给发送按钮绑定点击事件
+        sendBn.addActionListener( e->{
+                //获取输入框内容，并发送给服务端
+                String msg = smsSend.getText();
+                //清空输入框
+                smsSend.setText("");
+                //发送给服务端
+                sendMsgToServer(msg);
+        });
+
         //添加组件
         bottomPanel.add(smsSendScrollPane,BorderLayout.CENTER);
         bottomPanel.add(btns,BorderLayout.EAST);
@@ -95,6 +103,21 @@ public class ClientChatFrame extends JFrame{
 
     }
 
+    //发送消息给服务端
+    private void sendMsgToServer(String msg) {
+
+        try {
+            //1、从socket管道中得到一个数据输出流
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            //2、发送给服务端
+            dos.writeInt(2);//群聊消息类型2
+            dos.writeUTF(msg);//发送消息内容
+            dos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         new ClientChatFrame();
     }
@@ -102,5 +125,10 @@ public class ClientChatFrame extends JFrame{
     public void updateOnlineUsers(String[] onLineNames) {
         //把线程读取到的在线用户昵称展示到界面上
         onlineUsers.setListData(onLineNames);
+    }
+
+    public void setMsgToWin(String msg) {
+        //更新群聊消息到界面展示
+        smsContent.append(msg);
     }
 }

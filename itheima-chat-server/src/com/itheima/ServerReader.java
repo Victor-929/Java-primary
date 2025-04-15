@@ -2,7 +2,6 @@ package com.itheima;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.InputStream;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -64,7 +63,7 @@ public class ServerReader extends Thread {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss EE a");
         String nowStr = dtf.format(now);
 
-        String msgResult = sb.append(name).append(" ").append(msg).append(nowStr).append("\r\n")
+        String msgResult = sb.append(name).append(" ").append(nowStr).append("\r\n")
                 .append(msg).append("\r\n").toString();
         //推送给全部客户端socket
         for (Socket socket : Server.onLineSockets.keySet()) {

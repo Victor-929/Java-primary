@@ -1,14 +1,7 @@
 package com.itheima.ui;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class ClientReaderThread extends Thread {
     private Socket socket;
@@ -34,6 +27,7 @@ public class ClientReaderThread extends Thread {
                         break;
                     case 2:
                         //服务端发送来的群聊消息
+                        getMsgToWin();
                         break;
                 }
             }
@@ -41,6 +35,12 @@ public class ClientReaderThread extends Thread {
             e.printStackTrace();
 
         }
+    }
+
+    private void getMsgToWin() throws Exception {
+        //获取群聊消息
+        String msg = dis.readUTF();
+        win.setMsgToWin(msg);
     }
 
     //更新客户端的在线人数列表
