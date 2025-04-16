@@ -1,6 +1,5 @@
 package com.itheima.demo3annotatior;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class AnnotatiorDemo4 {
@@ -15,8 +14,13 @@ public class AnnotatiorDemo4 {
         for (Method method : methods) {
             //3.1、判断方法上是否有MyTest注解
             if(method.isAnnotationPresent(MyTest.class)){
+                //先获取到这个方法的注解
+                MyTest myTest = method.getAnnotation(MyTest.class);
+                int count = myTest.count();
                 //3.2、有就执行
-                method.invoke(ad);
+                for (int i = 0; i < count; i++) {
+                    method.invoke(ad);
+                }
             }
         }
 
@@ -29,10 +33,11 @@ public class AnnotatiorDemo4 {
     public void test2(){
         System.out.println("test2方法执行了...");
     }
-    @MyTest
+    @MyTest(count = 2)
     public void test3(){
         System.out.println("test3方法执行了...");
     }
+    @MyTest
     public void test4(){
         System.out.println("test4方法执行了...");
     }
